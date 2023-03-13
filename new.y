@@ -6,6 +6,57 @@
     extern int yyparse();
     extern int yyerror(char *s);
 
+	void max(char *type1, char *type2); //to check for type conversion in the type hierarchy 
+
+	typedef struct entry {
+		string name;
+		string type;
+		int line;
+	}entry;
+
+	typedef struct symbolTable{
+		public:
+		unordered_set<entry> locvars;
+		vector<*st> childscopes;
+		st *parentscope;
+		
+		//constructor
+		symbolTable(st *parentscope){
+			this->parentscope = parentscope;
+		}
+		//lookup() returns the type of the variable if found in the symbol table. if not, return "not found"
+		string lookup(string lexeme){
+			for (auto itr = locvars.begin(); itr != locvars.end(); ++itr) {
+				if(itr->name == lexeme){
+					return itr->type;
+				}
+			}
+			if(parentscope == NULL){
+				return "not found";
+			}
+			else{
+				return parentscope->lookup(lexeme);
+			}
+		}
+
+		//insert() inserts the variable in the symbol table
+		void insert(string lexeme, string type, int line){
+			entry e;
+			e.name = lexeme;
+			e.type = type;
+			e.line = line;
+			locvars.insert(e);
+		}
+
+		//insertscope() inserts a new child scope in the symbol table
+		void insertscope(st *childscope){
+			childscopes.push_back(childscope);
+		}
+
+
+	}st;
+
+	st *root = new st();
 
 	int nodeNum  = 0;
 %}
