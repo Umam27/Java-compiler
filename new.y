@@ -1,64 +1,27 @@
 %{
     #include<bits/stdc++.h>
+	#include "symtab.h"
 	#include "ast.h"
     using namespace std;
     extern int yylex();
     extern int yyparse();
     extern int yyerror(char *s);
-
-	void max(char *type1, char *type2); //to check for type conversion in the type hierarchy 
-
-	typedef struct entry {
-		string name;
-		string type;
-		int line;
-	}entry;
-
-	typedef struct symbolTable{
-		public:
-		unordered_set<entry> locvars;
-		vector<*st> childscopes;
-		st *parentscope;
-		
-		//constructor
-		symbolTable(st *parentscope){
-			this->parentscope = parentscope;
-		}
-		//lookup() returns the type of the variable if found in the symbol table. if not, return "not found"
-		string lookup(string lexeme){
-			for (auto itr = locvars.begin(); itr != locvars.end(); ++itr) {
-				if(itr->name == lexeme){
-					return itr->type;
-				}
-			}
-			if(parentscope == NULL){
-				return "not found";
-			}
-			else{
-				return parentscope->lookup(lexeme);
-			}
-		}
-
-		//insert() inserts the variable in the symbol table
-		void insert(string lexeme, string type, int line){
-			entry e;
-			e.name = lexeme;
-			e.type = type;
-			e.line = line;
-			locvars.insert(e);
-		}
-
-		//insertscope() inserts a new child scope in the symbol table
-		void insertscope(st *childscope){
-			childscopes.push_back(childscope);
-		}
+    extern "C" int yylineno;
 
 
-	}st;
 
-	st *root = new st();
+	string type;
+
+	// helper func
+	void insertType(){
+		strcpy(type, yytext);
+	}
 
 	int nodeNum  = 0;
+
+	symTab root;
+    symTab* curr = &root;
+    symTab* child;
 %}
 
 %union {
@@ -141,26 +104,38 @@ Start: CompilationUnit {
 Literal: INTLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Integer Literal");
+			//
+			insertType();
 		}
 		| FLOATLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Float Literal");
+			//
+			insertType();
 		}
 		| BOOLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Bool Literal");
+			//
+			insertType();
 		}
 		| STRINGLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "String Literal");
+			//
+			insertType();
 		}
 		| CHARLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Char Literal");
+			//
+			insertType();
 		}
 		| NULLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Null Literal");
+			//
+			insertType();
 		}
 		;
 
@@ -196,22 +171,32 @@ NumericType: IntegralType {
 IntegralType: BYTE {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Byte");
+			//
+			insertType();
 		}
 		| SHORT {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Short");
+			//
+			insertType();
 		}
 		| INT {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Integer");
+			//
+			insertType();
 		}
 		| LONG {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Long");
+			//
+			insertType();
 		}
 		| CHAR {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Character");
+			//
+			insertType();
 		}
 		;
 
