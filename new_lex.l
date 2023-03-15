@@ -2,6 +2,7 @@
     #include<bits/stdc++.h>
     using namespace std;
     #include "ast.h"
+    #include "symtab.h"
     #include "new.tab.h"
     extern YYSTYPE yylval;
     int yylex();
@@ -491,6 +492,8 @@ letter [a-zA-Z_]
 }
 "public"    {
     //printf("public");
+    insertId(yytext,1);
+    insertLit(yytext,"int",1);
     yylval.str = yytext;
     return PUBLIC;
 }

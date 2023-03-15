@@ -1,6 +1,6 @@
 %{
     #include<bits/stdc++.h>
-	#include "symtab.h"
+	#include "symtab.cpp"
 	#include "ast.h"
     using namespace std;
     extern int yylex();
@@ -13,15 +13,11 @@
 	string type;
 
 	// helper func
-	void insertType(){
-		strcpy(type, yytext);
-	}
+	// void insertType(){
+	// 	strcpy(type, yytext);
+	// }
 
 	int nodeNum  = 0;
-
-	symTab root;
-    symTab* curr = &root;
-    symTab* child;
 %}
 
 %union {
@@ -104,38 +100,26 @@ Start: CompilationUnit {
 Literal: INTLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Integer Literal");
-			//
-			insertType();
 		}
 		| FLOATLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Float Literal");
-			//
-			insertType();
 		}
 		| BOOLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Bool Literal");
-			//
-			insertType();
 		}
 		| STRINGLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "String Literal");
-			//
-			insertType();
 		}
 		| CHARLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Char Literal");
-			//
-			insertType();
 		}
 		| NULLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Null Literal");
-			//
-			insertType();
 		}
 		;
 
@@ -172,31 +156,31 @@ IntegralType: BYTE {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Byte");
 			//
-			insertType();
+			// insertType();
 		}
 		| SHORT {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Short");
 			//
-			insertType();
+			// insertType();
 		}
 		| INT {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Integer");
 			//
-			insertType();
+			// insertType();
 		}
 		| LONG {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Long");
 			//
-			insertType();
+			// insertType();
 		}
 		| CHAR {
 			$$ = new ASTnode(++nodeNum , "Integer Type");
 			nodeToTerminal($$, $1, "Character");
 			//
-			insertType();
+			// insertType();
 		}
 		;
 
@@ -400,6 +384,11 @@ Modifiers: Modifier {
 Modifier: PUBLIC {
 	$$ = new ASTnode(++nodeNum , "Modifier");
 	nodeToTerminal($$, $1, "Public");
+	//
+	cout<<lookup($1)<<endl;
+	cout<<insertDeclType($1,"trial")<<endl;
+	cout<<insertMethodType($1,"trialfi","trialfo")<<endl;
+	addChild();
 }
 		| PROTECTED {
 	$$ = new ASTnode(++nodeNum , "Modifier");
@@ -2278,6 +2267,8 @@ int yyerror(char *s){
 }
 
 int main(){
+	symTabInit();
     yyparse();
     return 0;
 }
+
