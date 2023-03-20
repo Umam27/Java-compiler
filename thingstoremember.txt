@@ -1,0 +1,14 @@
+funcn defintiion is at the same place with declartion;
+library funcns ka type checking nhi kiya
+
+
+
+check scope changing during break keyword;
+scope change during while(ConditionalExpression) ----> conditional expression m declaration aa skti koi?
+
+assuming assert ke expresion 1 mai koi declaration na aaye;
+assuming switch ke paranthesis mai koi declaration na aaye;
+
+
+
+catch()

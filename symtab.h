@@ -6,6 +6,11 @@ class attr {
     public: 
         string type;
         int line;
+        // symTab* childptr;
+        string fi;
+        string fo;
+
+        attr(void);
 };
 
 class symTab {
@@ -13,59 +18,42 @@ class symTab {
         unordered_map<string, attr> entries;
         vector<symTab*> childscopes;
         symTab* parentscope;
+        string scp;
+
         
         //constructor
-        symTab(){
-            this->parentscope = NULL;
-        }
-        symTab(symTab *parent){
-            this->parentscope = parent;
-        }
-
-        //lookup() returns the type of the variable if found in the symbol table. if not, return "not found"
-        string lookup(string lexeme){
-            for (auto entry : entries) {
-                if(entry.first == lexeme){
-                    return entry.second.type;
-                }
-            }
-            if(parentscope == NULL){
-                return "NULL";
-            }
-            else{
-                return parentscope->lookup(lexeme);
-            }
-        }
-
-        string sameScopeLookup(string lexeme){
-            for (auto entry : entries) {
-                if(entry.first == lexeme){
-                    return entry.second.type;
-                }
-            }
-            return "NULL";
-        }
-
-        //insert() inserts the variable in the symbol table
-        bool insert(string lexeme, string type, int line){
-            string sslookup;
-            sslookup = this->sameScopeLookup(lexeme);
-            if(sslookup=="NULL") {
-                attr val;
-                val.type = type;
-                val.line = line;
-                entries.insert({lexeme,val});
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-        //insertscope() inserts a new child scope in the symbol table
-        void addChild(symTab* newChild){
-            childscopes.push_back(newChild);
-        }
-
-
+        symTab(void);
+        symTab(symTab *parent);
 };
+
+void symTabInit(void);
+
+//lookup() returns the type of the variable if found in the symbol table. if not, return "NULL"
+string lookup(string);
+string sameScopeLookup(string lexeme);
+
+//helper function
+bool editEntry(string lexeme, string type, string fi, string fo);
+
+
+bool insertId(char* templex, int line);
+bool insertLit(char* templex, string type, int line);
+
+//insertDeclType() inserts the variable in the symbol table
+bool insertDeclType(string lexeme, string type);
+
+//insertMethod() inserts the method in the symbol table
+bool insertMethodType(string lexeme, string fi, string fo);
+
+//insertClass() inserts the class in the symbol table
+// bool insertClass(string lexeme, string type, int line, symTab* child);
+
+//insertscope() inserts a new child scope in the symbol table
+void addChild();
+
+void goUp();
+
+// void printSymTab();
+void printSB(symTab* helper);
+void printGSB();
+
