@@ -16,8 +16,10 @@ class attr {
 class symTab {
     public:
         unordered_map<string, attr> entries;
-        vector<symTab> childscopes;
+        vector<symTab*> childscopes;
         symTab* parentscope;
+        string scp;
+
         
         //constructor
         symTab(void);
@@ -49,5 +51,9 @@ bool insertMethodType(string lexeme, string fi, string fo);
 //insertscope() inserts a new child scope in the symbol table
 void addChild();
 
+void goUp();
 
+// void printSymTab();
+void printSB(symTab* helper);
+void printGSB();
 

@@ -6,6 +6,8 @@
     #include "new.tab.h"
     extern YYSTYPE yylval;
     int yylex();
+
+    int flag =0;
 %}
 
 digit [0-9]
@@ -29,7 +31,7 @@ letter [a-zA-Z_]
 }
 
 \/\/.* {
-    // //printf("//commemt ");
+    // //printf("//comment ");
 }
 "/*"(.|\n)*"*/" {
     // Handling Comment
@@ -111,11 +113,22 @@ letter [a-zA-Z_]
 "{" {
     //printf("{");
     yylval.str = yytext;
+
+    // if(flag==0){
+    //     addChild();
+    // }
+    // else{
+    //     flag=0;
+    // }
+
     return LC;
 }
 "}" {
     //printf("}");
     yylval.str = yytext;
+
+    // goUp();
+
     return RC;
 }
 "[" {
@@ -349,6 +362,10 @@ letter [a-zA-Z_]
 "catch"    {
     //printf("finally");
     yylval.str = yytext;
+
+    flag=1;
+    // addChild();
+
     return CATCH;
 }
 "synchronized"    {
@@ -385,6 +402,10 @@ letter [a-zA-Z_]
 "for"    {
     //printf("for");
     yylval.str = yytext;
+
+    flag=1;
+    // addChild();
+
     return FOR;
 }
 "do"    {
@@ -492,8 +513,6 @@ letter [a-zA-Z_]
 }
 "public"    {
     //printf("public");
-    insertId(yytext,1);
-    insertLit(yytext,"int",1);
     yylval.str = yytext;
     return PUBLIC;
 }
@@ -647,87 +666,103 @@ letter [a-zA-Z_]
 0[xX][0-9a-fA-F][0-9a-fA-F_]+[lL]? {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "INT", yylineno);
     return INTLITERAL;
 }
 0[lL]?|{nonZeroDigit}[0-9_]*{digit}*[lL]?|{nonZeroDigit}[]+[0-9*]{digit}+[lL]? {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "INT", yylineno);
     return INTLITERAL;
 }
 [0][0-7]+[_0-7]+[lL]?   {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "INT", yylineno);
     return INTLITERAL;
 }
 [0][bB][01][01_]+[lL]?   {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "INT", yylineno);
     return INTLITERAL;
 }
 
 {digit}+[fF] {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 {digit}+\.{digit}*([eE][+-]?{digit}+)?[fF] {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 \.{digit}+([eE][+-]?{digit}+)?[fF] {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 {digit}+[eE][+-]?{digit}+[fF] {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 {digit}+\.{digit}*([eE][+-]?{digit}+)?[dD]? {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 \.{digit}+([eE][+-]?{digit}+)?[dD]? {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 {digit}+[eE][+-]?{digit}+[dD]? {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "FLOAT", yylineno);
     return FLOATLITERAL;
 }
 
 "true"|"false" {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "BOOL", yylineno);
     return BOOLLITERAL;
 }
 
 "\""[^\"]*"\"" {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "STRING", yylineno);
     return STRINGLITERAL;
 }
 
 '.'|'%' {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "CHAR", yylineno);
     return CHARLITERAL;
 }
 
 "null" {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertLit(yytext, "NULL", yylineno);
     return NULLLITERAL;
 }
 
 {letter}({digit}|{letter})* {
     //printf("%s", yytext);
     yylval.str = yytext;
+    // insertId(yytext, yylineno);
     return IDENT;
 }
 

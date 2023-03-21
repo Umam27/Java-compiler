@@ -94,32 +94,40 @@
 Start: CompilationUnit {
 	$$ = new ASTnode(++nodeNum, "Start");
 	nodeJoin($$, $1);
+	// printSymTab();
+	printGSB();
 }
         ;
 
 Literal: INTLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Integer Literal");
+			// insertLit($1, "int", yylineno);
 		}
 		| FLOATLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Float Literal");
+			// insertLit($1, "float", yylineno);
 		}
 		| BOOLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Bool Literal");
+			// insertLit($1, "bool", yylineno);
 		}
 		| STRINGLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "String Literal");
+			// insertLit($1, "string", yylineno);
 		}
 		| CHARLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Char Literal");
+			// insertLit($1, "char", yylineno);
 		}
 		| NULLLITERAL {
 			$$ = new ASTnode(++nodeNum , "Literal");
 			nodeToTerminal($$, $1, "Null Literal");
+			// insertLit($1, "null", yylineno);
 		}
 		;
 
@@ -385,10 +393,10 @@ Modifier: PUBLIC {
 	$$ = new ASTnode(++nodeNum , "Modifier");
 	nodeToTerminal($$, $1, "Public");
 	//
-	cout<<lookup($1)<<endl;
-	cout<<insertDeclType($1,"trial")<<endl;
-	cout<<insertMethodType($1,"trialfi","trialfo")<<endl;
-	addChild();
+	// cout<<lookup($1)<<endl;
+	// cout<<insertDeclType($1,"trial")<<endl;
+	// cout<<insertMethodType($1,"trialfi","trialfo")<<endl;
+	// addChild();
 }
 		| PROTECTED {
 	$$ = new ASTnode(++nodeNum , "Modifier");
